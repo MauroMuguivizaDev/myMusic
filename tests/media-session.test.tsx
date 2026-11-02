@@ -1,0 +1,31 @@
+import { renderHook } from '@testing-library/react';
+import { afterEach, expect, it, vi } from 'vitest';
+import { useMediaSession } from '../src/hooks/useMediaSession';
+import type { Track } from '../src/domain/music';
+const track: Track = { id: 'a', title: 'Title', artist: 'Artist', album: 'Album', fileName: 'a.mp3', mime: 'audio/mpeg', size: 1, addedAt: 0 };
+afterEach(() => { vi.unstubAllGlobals(); Object.defineProperty(navigator, 'mediaSession', { value: undefined, configurable: true }); });
+it('publica metadados, ações e posição; limpa tudo no fim da sessão', () => {
+  const handlers = new Map<string, MediaSessionActionHandler | null>();
+  const session = { metadata: null as MediaMetadata | null, playbackState: 'none', setActionHandler: vi.fn((name, callback) => handlers.set(name,callback)), setPositionState: vi.fn() };
+  Object.defineProperty(navigator, 'mediaSession', { value: session, configurable: true });
+  vi.stubGlobal('MediaMetadata', class { constructor(data: object) { Object.assign(this,data); } });
+  const play = vi.fn(), pause = vi.fn(), step = vi.fn(), seek = vi.fn(), stop = vi.fn();
+  const { rerender, unmount } = renderHook(({ current }: { current: Track | null }) => useMediaSession({ current, playing: true, position: 5, duration: 60, rate: 1.5, play, pause, step, seek, stop }), { initialProps: { current: track as Track | null } });
+  expect(session.metadata).toMatchObject({ title: 'Title', artist: 'Artist', artwork: [expect.objectContaining({ sizes: '512x512' })] });
+  handlers.get('play')?.({ action: 'play' }); handlers.get('pause')?.({ action: 'pause' });
+  handlers.get('nexttrack')?.({ action: 'nexttrack' }); handlers.get('previoustrack')?.({ action: 'previoustrack' });
+  handlers.get('seekto')?.({ action: 'seekto', seekTime: 12 });
+  expect(play).toHaveBeenCalledOnce(); expect(pause).toHaveBeenCalledOnce();
+  expect(step.mock.calls).toEqual([[1],[-1]]); expect(seek).toHaveBeenCalledWith(12);
+  expect(session.setPositionState).toHaveBeenCalledWith({ duration: 60, position: 5, playbackRate: 1.5 });
+  rerender({ current: null });
+  expect(session.metadata).toBeNull(); expect(session.playbackState).toBe('none');
+  expect([...handlers.values()].every(handler => handler === null)).toBe(true);
+  unmount();
+});
+it('tolera ações e reporte de posição não suportados', () => {
+  Object.defineProperty(navigator, 'mediaSession', { configurable: true, value: { setActionHandler: () => { throw new Error('unsupported'); }, setPositionState: () => { throw new Error('unsupported'); } } });
+  const noop = vi.fn();
+  const { unmount } = renderHook(() => useMediaSession({ current: track, playing: false, position: 1, duration: 10, rate: 1, play: noop, pause: noop, step: noop, seek: noop, stop: noop }));
+  expect(() => unmount()).not.toThrow();
+});

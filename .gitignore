@@ -1,0 +1,72 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+playwright-report
+test-results
+.certs/
+dist
+dist-ssr
+*.local
+
+# Local secrets and environment configuration (keep only the documented template)
+.env
+.env.*
+!.env.example
+
+# Local browser, build and editor state
+.vite/
+.cache/
+*.tsbuildinfo
+
+# Personal audio, artwork, libraries, exports and backups
+*.mp3
+*.m4a
+*.aac
+*.wav
+*.flac
+*.ogg
+*.opus
+*.aiff
+*.aif
+*.webm
+*.zip
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+*.dump
+audio/
+music/
+covers/
+artwork/
+backups/
+exports/
+library-data/
+personal-library/
+
+# Local visual review captures and credentials
+design-review/
+*.pem
+*.key
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Credenciais locais de desenvolvimento
+.env.local
