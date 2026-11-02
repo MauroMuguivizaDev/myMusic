@@ -19,7 +19,6 @@ import {
   ArrowDownToLine,
   ArrowUpFromLine,
   RefreshCw,
-  AudioLines,
   Check,
   ChevronRight,
   Disc3,
@@ -863,7 +862,7 @@ function Shell() {
           aria-label="My Music — Início"
         >
           <span className="brand-icon">
-            <AudioLines size={25} />
+            <Music2 size={25} />
           </span>
 
           my music

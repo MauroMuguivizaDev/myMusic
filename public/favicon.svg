@@ -1,1 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#000"/><path d="M17 27v10m8-18v26m8-33v40m8-31v22m8-15v8" fill="none" stroke="#d6f49b" stroke-width="4" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="background" x1="56" y1="40" x2="456" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#193d31"/>
+      <stop offset=".52" stop-color="#0c1d18"/>
+      <stop offset="1" stop-color="#050b09"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="matrix(0 298 -298 0 256 180)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#b7f66b" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#b7f66b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="note" x1="141" y1="127" x2="334" y2="405" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f0ffbd"/>
+      <stop offset="1" stop-color="#baf36e"/>
+    </linearGradient>
+    <filter id="note-shadow" x="78" y="93" width="364" height="355" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="13"/>
+      <feColorMatrix values="0 0 0 0 .65 0 0 0 0 .95 0 0 0 0 .38 0 0 0 .2 0"/>
+      <feBlend in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <path fill="url(#background)" d="M0 0h512v512H0z"/>
+  <path fill="url(#glow)" d="M0 0h512v512H0z"/>
+  <circle cx="256" cy="256" r="194" stroke="#eaffd9" stroke-opacity=".055" stroke-width="2"/>
+  <circle cx="256" cy="256" r="174" stroke="#eaffd9" stroke-opacity=".035" stroke-width="2"/>
+  <g filter="url(#note-shadow)" fill="url(#note)">
+    <path d="m169 149 150-38v37l-150 38z"/>
+    <rect x="302" y="128" width="21" height="174" rx="10.5"/>
+    <rect x="159" y="166" width="21" height="179" rx="10.5"/>
+    <ellipse cx="147" cy="353" rx="43" ry="29" transform="rotate(-22 147 353)"/>
+    <ellipse cx="291" cy="308" rx="43" ry="29" transform="rotate(-22 291 308)"/>
+  </g>
+</svg>
