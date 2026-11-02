@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 
 import {
@@ -99,6 +100,10 @@ const navigation = [
   { to: "/library", label: "Biblioteca", icon: Library },
   { to: "/downloads", label: "Downloads", icon: Download },
 ];
+
+function DeferredPage({ render }: { render: () => ReactNode }) {
+  return render();
+}
 
 function Shell() {
   useFormViewport();
@@ -966,22 +971,22 @@ function Shell() {
 
           <Route
             path="/search"
-            element={SearchPage()}
+            element={<DeferredPage render={SearchPage} />}
           />
 
           <Route
             path="/library"
-            element={LibraryPage()}
+            element={<DeferredPage render={LibraryPage} />}
           />
 
           <Route
             path="/themes"
-            element={ThemesPage()}
+            element={<DeferredPage render={ThemesPage} />}
           />
 
           <Route
             path="/settings"
-            element={SettingsPage()}
+            element={<DeferredPage render={SettingsPage} />}
           />
 
           <Route

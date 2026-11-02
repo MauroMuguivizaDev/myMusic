@@ -56,7 +56,7 @@ it('indica quando IndexedDB não permite ler os ficheiros da biblioteca', async 
   vi.spyOn(library.db.files, 'toCollection').mockImplementation(() => { throw new Error('blocked'); });
   const { unmount } = render(<StorageSettings tracks={[]} onDelete={vi.fn()} />);
   expect(await screen.findByText('Não foi possível ler os ficheiros da biblioteca.')).toBeTruthy();
-  const libraryRow = screen.getByText('Biblioteca musical').closest('.storage-summary-row');
+  const libraryRow = screen.getByText('Biblioteca').closest('.storage-summary-row');
   expect(libraryRow).toBeTruthy();
   expect(within(libraryRow as HTMLElement).getByText('Indisponível')).toBeTruthy();
   unmount();

@@ -1,7 +1,10 @@
 import { ArrowDownToLine, AudioLines, Trash2, Heart, Ellipsis, Pencil, RefreshCw } from "lucide-react";
 import { formatTime, type Track, type Playlist } from "../domain/music";
 import { Cover } from "./Cover";
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+const INITIAL_TRACKS = 60;
+const TRACKS_PER_BATCH = 40;
 
 function placeMenu(details: HTMLDetailsElement) {
   if (!details.open) return;
@@ -45,6 +48,22 @@ export function TrackList({
   onRefresh,
   favorites = [], playlists = [], onFavorite, onEnqueue, onPlaylist,
 }: Props) {
+  const [visibleCount, setVisibleCount] = useState(INITIAL_TRACKS);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const hasMore = visibleCount < items.length;
+
+  useEffect(() => {
+    const sentinel = loadMoreRef.current;
+    if (!sentinel || !hasMore || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        setVisibleCount(count => count + TRACKS_PER_BATCH);
+      }
+    }, { rootMargin: '500px 0px' });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore]);
+
   useEffect(() => {
     const dismiss = (event: PointerEvent) => {
       document.querySelectorAll<HTMLDetailsElement>('.track-menu[open]').forEach(details => {
@@ -56,7 +75,7 @@ export function TrackList({
   }, []);
   return (
     <div className="track-list">
-      {items.map((track, index) => (
+      {items.slice(0, visibleCount).map((track, index) => (
         <div
           className={`track-row ${currentId === track.id ? "selected" : ""}`}
           key={track.id}
@@ -110,6 +129,9 @@ export function TrackList({
           </button></>}
         </div>
       ))}
+      {hasMore && <div ref={loadMoreRef} className="track-list-more">
+        {typeof IntersectionObserver === 'undefined' && <button type="button" className="text-link" onClick={() => setVisibleCount(count => count + TRACKS_PER_BATCH)}>Carregar mais músicas</button>}
+      </div>}
     </div>
   );
 }

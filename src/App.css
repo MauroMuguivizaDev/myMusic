@@ -97,6 +97,7 @@ h3 { font-size:17px; font-weight:600; }
 .collection-tools input,select,.track-editor input:not([type="file"]) { min-height:44px; padding:10px 12px; border:1px solid var(--border); border-radius:9px; background:var(--panel); color:#eeeeef; min-width:0; max-width:100%; font:inherit; font-size:12px; }
 select { width:100%; }
 .track-list { margin-top:20px; }
+.track-list-more { min-height:1px; display:flex; justify-content:center; }
 .track-row { display:flex; align-items:center; gap:10px; min-height:64px; border-radius:10px; padding:7px 0; }
 .track-row.selected { background:color-mix(in srgb,var(--accent) 5%,transparent); }
 .track-index { display:none; }
